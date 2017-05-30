@@ -1,0 +1,23 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "An app written in node.js and socket.io that lets users chat in real time",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csevere/chat-app.git"
+  },
+  "keywords": [
+    "chat",
+    "app"
+  ],
+  "author": "Carla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csevere/chat-app/issues"
+  },
+  "homepage": "https://github.com/csevere/chat-app#readme"
+}
