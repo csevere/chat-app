@@ -26,10 +26,12 @@ var server = http.createServer((req, res)=>{
 
 //this runs on the server, separate from the index.html 
 var io = socketio.listen(server); 
+var newUsers = [];
 // sockets have .on -> listening and .emit -> send
 // handle socket connections ...
 //sockets are TCP/UDP
 //callbacks 
+//io.sockets contains all the sockets
 io.sockets.on('connect',(socket) =>{
 	console.log('Someone connected via socket.')
 
@@ -48,8 +50,36 @@ io.sockets.on('connect',(socket) =>{
 		io.sockets.emit('messageToClient', messageObj.newMessage + " --" + messageObj.name);
 		console.log(messageObj.name)
 
-	})
-});  
+	});
+});
+
+
+
+// io.sockets.on('connect',(socket) =>{
+// 	console.log('Someone connected via socket.')
+// 	newUsers.push(socket);
+
+// 	socket.on('nameToServer', (name)=>{
+// 		console.log(name + " just joined."); 
+// 		io.sockets.emit('newUser', name); 
+// 	});
+
+// 	socket.on('sendMessage', ()=>{
+// 		console.log("Someone clicked the button.");
+// 	});
+
+// 	socket.on('messageToServer', (messageObj)=>{
+// 		//sockets send to everyone on server
+// 		console.log(messageObj);
+// 		io.sockets.emit('messageToClient', messageObj.newMessage + " --" + messageObj.name);
+// 		console.log(messageObj.name)
+
+// 	});
+// 	socket.on('disconnect')
+// });
+
+
+ 
 
 console.log("the node file is working")
 server.listen(8080);
