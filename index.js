@@ -37,7 +37,7 @@ io.sockets.on('connect',(socket) =>{
 		console.log(name + " just joined."); 
 		io.sockets.emit('newUser', name); 
 	});
-	
+
 	socket.on('sendMessage', ()=>{
 		console.log("Someone clicked the button.");
 	});
@@ -45,7 +45,8 @@ io.sockets.on('connect',(socket) =>{
 	socket.on('messageToServer', (messageObj)=>{
 		//sockets send to everyone on server
 		console.log(messageObj);
-		io.sockets.emit('messageToClient', messageObj.newMessage + '--' + messageObj.name);
+		io.sockets.emit('messageToClient', messageObj.newMessage + " --" + messageObj.name);
+		console.log(messageObj.name)
 
 	})
 });  

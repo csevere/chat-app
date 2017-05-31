@@ -1,4 +1,3 @@
-  
 <!DOCTYPE html>
 <html>
   <head>
@@ -69,7 +68,7 @@
       display: flex;
       flex-direction: row; 
       background: rgba(137, 46, 46, 0.3);
-      border: 2px inset brown;
+      border-bottom: 2px inset purple;
       color: black;
    }
 
@@ -116,6 +115,7 @@
   background: rgba(137, 46, 46, 0.3);
   color:white;
   font-size: 14px; 
+  padding-left: 10px; 
 
 }
 
@@ -243,6 +243,8 @@
        // var name = prompt("What is your name?");
 
         var socketio = io.connect('http://127.0.0.1:8080');
+        var name = $('#new-user').val();
+
 
        $('#submitUser').submit(function(event){
             //prevent from repeating submission
@@ -260,8 +262,7 @@
 
        var newUsers = [];
       
-       var newUsersHTML = '';
-
+       var newUsersHTML = name;
 
        socketio.on('newUser', (userName)=>{
           console.log(userName + " just joined!")
@@ -276,25 +277,36 @@
                console.log(newUsers);
           
           }
-  
-         
+    
 
        }); 
 
-       // $('#send-message').click(function(){
-       //      socketio.emit('sendMessage'); 
-       //      console.log("the button works"); 
-       // })
+       //   socketio.on('newUser', (userName)=>{
+       //    console.log(userName + " just joined!");
+       //     var name = $('#new-user').val();
+
+       //    for (i = 0; i < newUsers.length; i++){
+       //        newUsers.push(name); 
+       //        newUsersHTML += '<div id = "users">'+ userName + '<br>'+ '</div>';
+       //        $('#users').html(newUsersHTML); 
+       //         console.log(newUsers);
+          
+       //    }
+    
+
+       // }); 
+
 
         $('#submit-message').submit(function(event){
             //prevent from repeating submission
             event.preventDefault();
-            console.log("This button works!")
+            // console.log("This button works!")
+            // make sure your variable aren't local 
+            var name = $('#new-user').val();
             var newMessage = $('#new-message').val();
             socketio.emit('messageToServer', {
                 newMessage:newMessage,
                 name: name
-
 
             }); 
             
@@ -305,7 +317,7 @@
             var uiFormat = now.getHours() + ":" + now.getMinutes(); 
             console.log(uiFormat); 
 
-            $('#messages').prepend('<p> ' + message + '' + ' (' +uiFormat+ ')' + '</p>'); 
+            $('#messages').prepend('<p> ' + message +  ' (' +uiFormat+ ')' + '</p>'); 
 
 
         });
