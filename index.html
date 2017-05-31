@@ -1,0 +1,318 @@
+  
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat App - node and sockets</title>
+
+<!--     <link rel="stylesheet" type ="text/css" href="styles.css"/> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <!--  <script type="text/javascript" src = "scripts.js"></script> -->
+  
+
+   <style>
+
+  html{
+    height: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    -webkit-perspective: 150px; /* Chrome, Safari, Opera  */
+    
+  }
+
+
+
+  body, .main-parent{
+      height: 103%;
+      min-width: 100%;
+      overflow-x: hidden;
+      overflow-y: hidden;
+  }
+
+
+  .main-parent{
+      background: url('https://images6.alphacoders.com/736/thumb-1920-736068.png') no-repeat center center fixed;
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     
+  }
+
+
+ /*** ENTIRE CHAT BOX ***/
+    .chat-parent{
+      width: 75%;
+      height: 75%;
+      background: rgba(153,51, 255, 0.3);
+      position: relative;
+      left: 13em;
+      top: 7em;
+      border: 2px ridge purple;
+    }
+
+
+
+   /**** MAIN NAV BAR *****/
+
+
+   #title{
+    position: relative;
+    left: 3em;
+    color: white;
+    font-weight: bold;
+
+   }
+
+
+   .nav-parent{
+      display: flex;
+      flex-direction: row; 
+      background: rgba(137, 46, 46, 0.3);
+      border: 2px inset brown;
+      color: black;
+   }
+
+  .text-parent{
+    display:flex;
+    flex-direction: column;
+
+  }
+
+
+
+  #person img{
+    height: 4em;
+    width: 4em;
+    position: relative;
+    left: 42em; 
+
+    }
+
+  #submitUser{
+    position: relative;
+    left: 42em;
+    top: 1em; 
+    display: inline-block;
+  } 
+
+  #new-user{
+    width: 67%;
+  }
+
+
+
+
+  /****** MESSAGE DISPLAY BOX *******/
+
+
+  #messages{
+  width: 80%;
+  height: 26em;
+  position: relative;
+  left: 1em;
+  top: -25em;
+  border: 2px inset #A0A0A0;
+  background: rgba(137, 46, 46, 0.3);
+  color:white;
+  font-size: 14px; 
+
+}
+
+
+
+/*****  USER LISTS *****/
+
+.userslist-parent{
+  display: flex;
+  flex-direction: column; 
+  background: rgba(137, 46, 46, 0.3);
+  color: white;
+  border: 2px inset #A0A0A0;
+  height: 26em;
+  width: 11em;
+  left: 61em;
+  top: 1em;
+  position: relative;
+}
+
+.users-child{
+  align-self: center; 
+}
+
+#online-users{
+  background: rgba(137, 46, 46, 0.3);
+  color: white;
+  width: 100%;
+  height: 2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+/****  FORMS: THE INPUT AND SUBMIT ****/
+
+ .text-child{
+  position: relative; 
+  top: -24em;
+  left: 1em;
+
+ }
+
+ input{
+  width: 74%;
+ }
+
+   
+
+
+
+
+
+
+
+
+   </style> 
+
+
+  </head>
+  <body>
+    
+
+    <div class = "main-parent">
+
+        <div class = "chat-parent">
+
+            <div class = "nav-parent" id = "nav-bar">
+                <div class = "nav-child" id = "chat-icon">
+                  
+                </div> 
+
+                <div class = "nav-child" id = "title">
+                    <h3> LET'S CHAT!</h3> 
+                </div> 
+
+                <div class = "nav-child" id = "person">
+                    <img src="https://cdn2.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/apps/personal.png">
+                </div>
+                
+                <form class = "nav-child" id = "submitUser">
+                    <input type = "text" id = "new-user">
+                    <button type = "submit" id = "newUser">JOIN</button>               
+                </form>
+
+            </div>
+
+            <div class = "userslist-parent">
+            
+                  <div id =  "online-users" class ="users-child">Online Users</div> 
+
+                  <div id = "users" class= "users-child"></div> <!-- User's name here --> </div>
+
+            <div class = "text-parent">
+
+                <div class = "text-child" id = "messages">
+                  <p> <!-- Messages display here  --> </p>
+
+                </div>
+
+                <form class = "text-child" id = "submit-message">
+                      <input type = "text" id = "new-message"/>
+                      <button type = "submit" id = "send">SEND</button>
+                </form>
+
+
+                <div class = "text-child" id = "emoji-box">
+                </div>
+      
+            </div>
+
+        </div>    
+
+    </div>
+
+
+
+
+
+      <script type="text/javascript" src = "/socket.io/socket.io.js"></script>
+
+       <script type="text/javascript">
+         
+       console.log("Browser javascript"); 
+       // var name = prompt("What is your name?");
+
+        var socketio = io.connect('http://127.0.0.1:8080');
+
+       $('#submitUser').submit(function(event){
+            //prevent from repeating submission
+            event.preventDefault();
+            var name = $('#new-user').val();
+             console.log(name); 
+             // console.log(io);
+             // console.log(window.io); 
+             //coming from index.js
+             //creates a tcp connection
+   
+             //send an event to the server
+             socketio.emit('nameToServer', name); 
+       });
+
+       var newUsers = [];
+      
+       var newUsersHTML = '';
+
+
+       socketio.on('newUser', (userName)=>{
+          console.log(userName + " just joined!")
+
+          for (i = 0; i < userName.length; i++){
+              if( i === 1){
+                break; 
+              }  
+              newUsersHTML += '<div id = "users">'+ userName + '<br>'+ '</div>';
+              newUsers.push(userName); 
+              $('#users').html(newUsersHTML); 
+               console.log(newUsers);
+          
+          }
+  
+         
+
+       }); 
+
+       // $('#send-message').click(function(){
+       //      socketio.emit('sendMessage'); 
+       //      console.log("the button works"); 
+       // })
+
+        $('#submit-message').submit(function(event){
+            //prevent from repeating submission
+            event.preventDefault();
+            console.log("This button works!")
+            var newMessage = $('#new-message').val();
+            socketio.emit('messageToServer', {
+                newMessage:newMessage,
+                name: name
+
+
+            }); 
+            
+       });
+
+        socketio.on('messageToClient', (message)=>{
+            var now = new Date(Date.now());
+            var uiFormat = now.getHours() + ":" + now.getMinutes(); 
+            console.log(uiFormat); 
+
+            $('#messages').prepend('<p> ' + message + '' + ' (' +uiFormat+ ')' + '</p>'); 
+
+
+        });
+
+
+
+       </script>
+
+  </body>
+</html>

@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/csevere/chat-app/issues"
   },
-  "homepage": "https://github.com/csevere/chat-app#readme"
+  "homepage": "https://github.com/csevere/chat-app#readme",
+  "dependencies": {
+    "socket.io": "^2.0.1"
+  }
 }
